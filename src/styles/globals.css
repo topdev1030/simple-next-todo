@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-100;
+}
+
+.bg-beige {
+  background-color: beige;
+}
+
+input textarea {
+  background-color: floralwhite;
+}
+
+.w-70 {
+  width: 70%;
+}
