@@ -13,6 +13,9 @@
   },
   "dependencies": {
     "@libsql/client": "^0.10.0",
+    "@radix-ui/react-alert-dialog": "^1.1.5",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-toast": "^1.2.5",
     "@tanstack/react-query": "^5.52.2",
     "@tanstack/react-query-devtools": "^5.52.2",
     "better-sqlite3": "^11.2.1",

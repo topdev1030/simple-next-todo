@@ -1,12 +1,16 @@
 'use client';
 
 import { InputField, TextAreaField } from '@/components/atoms';
+import { Toaster } from '@/components/ui/toaster';
+import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function EditTaskPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [task, setTask] = useState({ title: '', description: '', dueDate: '' });
+
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -24,6 +28,11 @@ export default function EditTaskPage({ params }: { params: { id: string } }) {
     await fetch(`/api/todos/${params.id}`, {
       method: 'PUT',
       body: JSON.stringify({ id: params.id, ...task }),
+    });
+
+    toast({
+      title: 'Success.',
+      description: 'A new task has been updated successfully',
     });
 
     router.push('/');
@@ -69,6 +78,7 @@ export default function EditTaskPage({ params }: { params: { id: string } }) {
             className="w-full rounded-lg bg-blue-500 py-2 text-white transition hover:bg-blue-600">
             Save Changes
           </button>
+          <Toaster />
         </form>
       </div>
     </div>

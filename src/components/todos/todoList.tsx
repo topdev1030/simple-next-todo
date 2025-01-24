@@ -3,6 +3,7 @@
 import { TodoItem as TodoItemType } from '@/types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+
 import { Spinner } from '../atoms';
 import { TodoItem } from './todoItem';
 
@@ -39,7 +40,7 @@ const TodoList = () => {
   };
 
   return (
-    <div className="bg-beige w-70 mx-auto flex items-center justify-center rounded-lg bg-gray-100 p-6">
+    <div className="bg-beige w-55 mx-auto flex items-center justify-center rounded-lg bg-gray-100 p-6">
       <div className="w-full max-w-2xl">
         <h1 className="mb-6 text-center text-3xl font-bold text-gray-800">Todo List</h1>
         <Link

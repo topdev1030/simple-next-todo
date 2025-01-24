@@ -1,7 +1,12 @@
 'use client';
 
 import type { TodoItem } from '@/types';
+import clsx from 'clsx';
 import Link from 'next/link';
+
+import { useToast } from '@/hooks/use-toast';
+import { AlertDialogDemo } from '../atoms';
+import { Toaster } from '../ui/toaster';
 
 interface TodoItemProps {
   todo: TodoItem;
@@ -10,6 +15,8 @@ interface TodoItemProps {
 }
 
 const TodoItem = ({ todo, onToggleComplete, onDeleteTodoComplete }: TodoItemProps) => {
+  const { toast } = useToast();
+
   const handleToggleComplete = async (id: number, isCompleted: boolean) => {
     try {
       const res = await fetch(`/api/todos/${id}`, {
@@ -28,9 +35,6 @@ const TodoItem = ({ todo, onToggleComplete, onDeleteTodoComplete }: TodoItemProp
   };
 
   const handleDeleteTodo = async (id: number) => {
-    const confirmDelete = confirm('Are you sure you want to delete this task?');
-    if (!confirmDelete) return;
-
     try {
       const res = await fetch(`/api/todos/${id}`, {
         method: 'DELETE',
@@ -38,8 +42,15 @@ const TodoItem = ({ todo, onToggleComplete, onDeleteTodoComplete }: TodoItemProp
 
       if (res.ok) {
         onDeleteTodoComplete(id);
+        toast({
+          title: 'Success.',
+          description: 'Task has been removed successfully',
+        });
       } else {
-        alert('Failed to delete task');
+        toast({
+          title: 'Failed.',
+          description: 'Failed to remove task',
+        });
       }
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -51,11 +62,10 @@ const TodoItem = ({ todo, onToggleComplete, onDeleteTodoComplete }: TodoItemProp
       key={todo.id}
       className="flex items-center justify-between rounded-lg bg-white p-4 shadow-lg">
       <div
-        className={
-          todo.isCompleted
-            ? 'text-lg font-medium text-gray-800 line-through'
-            : 'text-lg font-medium text-gray-800'
-        }>
+        className={clsx(
+          todo.isCompleted ? 'line-through' : '',
+          'text-lg font-medium text-gray-800'
+        )}>
         {todo.title}
       </div>
       <div className="space-x-2">
@@ -70,11 +80,14 @@ const TodoItem = ({ todo, onToggleComplete, onDeleteTodoComplete }: TodoItemProp
           passHref>
           Details
         </Link>
-        <button
-          onClick={() => handleDeleteTodo(todo.id)}
-          className="rounded-lg bg-red-500 px-3 py-2 text-white hover:bg-red-600">
-          Delete
-        </button>
+        <AlertDialogDemo
+          label="Delete"
+          title="Are you absolutely sure?"
+          description="This action cannot be undone. This will permanently delete your task from our servers."
+          className="rounded-lg bg-red-500 px-3 py-2 text-white hover:bg-red-600"
+          handler={() => handleDeleteTodo(todo.id)}
+        />
+        <Toaster />
       </div>
     </div>
   );

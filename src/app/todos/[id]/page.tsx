@@ -1,6 +1,8 @@
 'use client';
 
-import { Spinner } from '@/components/atoms';
+import { AlertDialogDemo, Spinner } from '@/components/atoms';
+import { Toaster } from '@/components/ui/toaster';
+import { useToast } from '@/hooks/use-toast';
 import { TodoItem } from '@/types';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -11,6 +13,8 @@ export default function TodoDetailPage({ params }: { params: { id: string } }) {
   const [task, setTask] = useState<TodoItem | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const { toast } = useToast();
+
   // Fetch the task details when the component loads
   useEffect(() => {
     const fetchTask = async () => {
@@ -20,10 +24,17 @@ export default function TodoDetailPage({ params }: { params: { id: string } }) {
           const data = await res.json();
           setTask(data);
         } else {
-          console.error('Failed to fetch task details');
+          toast({
+            title: 'Failed.',
+            description: 'Failed to fetch task details',
+          });
         }
       } catch (error) {
         console.error('Error fetching task:', error);
+        toast({
+          title: 'Failed.',
+          description: 'Error fetching task:',
+        });
       } finally {
         setLoading(false);
       }
@@ -34,22 +45,29 @@ export default function TodoDetailPage({ params }: { params: { id: string } }) {
 
   // Handle delete task
   const handleDelete = async () => {
-    const confirmDelete = confirm('Are you sure you want to delete this task?');
-    if (!confirmDelete) return;
-
     try {
       const res = await fetch(`/api/todos/${params.id}`, {
         method: 'DELETE',
       });
 
       if (res.ok) {
-        alert('Task deleted successfully');
+        toast({
+          title: 'Success.',
+          description: 'Task has been removed successfully',
+        });
         router.push('/');
       } else {
-        alert('Failed to delete task');
+        toast({
+          title: 'Failed.',
+          description: 'Failed to remove task',
+        });
       }
     } catch (error) {
       console.error('Error deleting task:', error);
+      toast({
+        title: 'Failed.',
+        description: 'Error deleting task:',
+      });
     }
   };
 
@@ -85,16 +103,19 @@ export default function TodoDetailPage({ params }: { params: { id: string } }) {
         <div className="mt-6 flex space-x-4">
           <Link
             href={`/todos/${task.id}/edit`}
-            className="flex w-full justify-center rounded-lg bg-blue-500 py-2 text-white transition hover:bg-blue-600">
+            className="mr-2 flex w-full justify-center rounded-lg bg-blue-500 py-2 text-white transition hover:bg-blue-600">
             Edit Task
           </Link>
-          <button
-            onClick={handleDelete}
-            className="w-full rounded-lg bg-red-500 py-2 text-white transition hover:bg-red-600">
-            Delete Task
-          </button>
+          <AlertDialogDemo
+            label="Delete Task"
+            title="Are you absolutely sure?"
+            description="This action cannot be undone. This will permanently delete your task from our servers."
+            className="w-full rounded-lg bg-red-500 py-2 text-white transition hover:bg-red-600"
+            handler={handleDelete}
+          />
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }

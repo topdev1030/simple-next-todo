@@ -1,6 +1,8 @@
 'use client';
 
 import { InputField, TextAreaField } from '@/components/atoms';
+import { Toaster } from '@/components/ui/toaster';
+import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -9,6 +11,8 @@ export default function AddTaskPage() {
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
 
+  const { toast } = useToast();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -16,6 +20,11 @@ export default function AddTaskPage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, description, dueDate }),
+    });
+
+    toast({
+      title: 'Success.',
+      description: 'A new task has been added successfully',
     });
 
     window.location.href = '/';
@@ -55,6 +64,7 @@ export default function AddTaskPage() {
             className="w-full rounded-lg bg-blue-500 py-2 text-white transition hover:bg-blue-600">
             Save Task
           </button>
+          <Toaster />
         </form>
       </div>
     </div>

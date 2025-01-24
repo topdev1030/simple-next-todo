@@ -14,8 +14,8 @@ input textarea {
   background-color: floralwhite;
 }
 
-.w-70 {
-  width: 70%;
+.w-55 {
+  width: 55%;
 }
 
 @layer base {
