@@ -1,7 +1,8 @@
 'use client';
 
-import Spinner from '@/components/Spinner';
+import { Spinner } from '@/components/atoms';
 import { TodoItem } from '@/types';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -63,11 +64,12 @@ export default function TodoDetailPage({ params }: { params: { id: string } }) {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="bg-beige w-full max-w-md rounded-lg bg-white p-6 shadow-md">
-        <a
+        <Link
           href="/"
-          className="mb-2 me-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          className="mb-2 me-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          passHref>
           Back
-        </a>
+        </Link>
 
         <h1 className="mb-4 mt-6 text-center text-2xl font-bold text-gray-800">{task.title}</h1>
         <p className="mb-2 text-gray-600">
@@ -81,11 +83,11 @@ export default function TodoDetailPage({ params }: { params: { id: string } }) {
           {new Date(task.createdAt).toLocaleString()}
         </p>
         <div className="mt-6 flex space-x-4">
-          <a
-            href={`/${task.id}/edit`}
+          <Link
+            href={`/todos/${task.id}/edit`}
             className="flex w-full justify-center rounded-lg bg-blue-500 py-2 text-white transition hover:bg-blue-600">
             Edit Task
-          </a>
+          </Link>
           <button
             onClick={handleDelete}
             className="w-full rounded-lg bg-red-500 py-2 text-white transition hover:bg-red-600">

@@ -1,6 +1,7 @@
 'use client';
 
 import type { TodoItem } from '@/types';
+import Link from 'next/link';
 
 interface TodoItemProps {
   todo: TodoItem;
@@ -63,11 +64,12 @@ const TodoItem = ({ todo, onToggleComplete, onDeleteTodoComplete }: TodoItemProp
           className="rounded-lg bg-green-500 px-3 py-2 text-white hover:bg-green-600">
           {todo.isCompleted ? 'Undo' : 'Complete'}
         </button>
-        <a
-          href={`/${todo.id}`}
-          className="rounded-lg bg-blue-500 px-3 py-2 text-white hover:bg-blue-600">
+        <Link
+          href={`/todos/${todo.id}`}
+          className="rounded-lg bg-blue-500 px-3 py-2 text-white hover:bg-blue-600"
+          passHref>
           Details
-        </a>
+        </Link>
         <button
           onClick={() => handleDeleteTodo(todo.id)}
           className="rounded-lg bg-red-500 px-3 py-2 text-white hover:bg-red-600">
@@ -78,4 +80,4 @@ const TodoItem = ({ todo, onToggleComplete, onDeleteTodoComplete }: TodoItemProp
   );
 };
 
-export default TodoItem;
+export { TodoItem };
